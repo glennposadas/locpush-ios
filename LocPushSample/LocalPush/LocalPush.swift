@@ -45,10 +45,34 @@ class LocalPush {
     }
   }
   
+  // MARK: - Canceling
+  
+  /// Remove a scheduled local push by id.
+  func removePush(_ id: String) {
+    UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [id])
+  }
+  
+  /// Remove all scheduled local push
+  func removeAllScheduled() {
+    UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+  }
+  
+  /// Remove all delivered push.
+  func removeAllDelivered() {
+    UNUserNotificationCenter.current().removeAllDeliveredNotifications()
+  }
+  
+  /// Remove all delivered and scheduled push.
+  func removeAllDeliveredAndScheduled() {
+    removeAllDelivered()
+    removeAllScheduled()
+  }
+  
   // MARK: - Scheduling
   
   /// Schedule a default push, using trigger.
   func schedulePush(
+    id: String = UUID().uuidString,
     title: String,
     subtitle: String?,
     sound: UNNotificationSound = .default,
@@ -65,7 +89,7 @@ class LocalPush {
 
     // choose a random identifier
     let request = UNNotificationRequest(
-      identifier: UUID().uuidString,
+      identifier: id,
       content: content,
       trigger: trigger
     )
@@ -76,6 +100,7 @@ class LocalPush {
   
   /// Schedule a default push, with all the parameters involved.
   func schedulePush(
+    id: String,
     title: String,
     subtitle: String?,
     sound: UNNotificationSound = .default,
@@ -84,11 +109,12 @@ class LocalPush {
     
     let trigger = getTrigger(timeInterval: interval, repeats: repeats)
     
-    schedulePush(title: title, subtitle: subtitle, trigger: trigger)
+    schedulePush(id: id, title: title, subtitle: subtitle, trigger: trigger)
   }
   
   /// Schedule a push using hour and minute.
   func schedulePush(
+    id: String = UUID().uuidString,
     title: String,
     subtitle: String?,
     hour: Int,
@@ -107,7 +133,7 @@ class LocalPush {
       repeats: repeats
     )
     
-    schedulePush(title: title, subtitle: subtitle, trigger: trigger)
+    schedulePush(id: id, title: title, subtitle: subtitle, trigger: trigger)
   }
   
   // MARK: - Private
