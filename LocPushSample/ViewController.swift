@@ -13,18 +13,12 @@ class ViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
+    LocalPush.shared.start()
+    
     DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-      UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
-          if success {
-              print("All set!")
-          } else if let error = error {
-              print(error.localizedDescription)
-          }
-      }
-      
 
       let content = UNMutableNotificationContent()
-      content.title = "Feed the cat + \(Int.random(in: 0..<5))!"
+      content.title = "112221Without sub Feed the cat + \(Int.random(in: 0..<5))!"
       content.subtitle = "It looks hungry2"
       content.sound = UNNotificationSound.default
 
